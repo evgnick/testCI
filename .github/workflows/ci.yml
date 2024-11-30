@@ -15,6 +15,11 @@ jobs:
     runs-on: ubuntu-latest  # Используемый runner — виртуальная машина с Ubuntu последней версии
 
     steps:                  # Последовательность шагов выполнения работы
+      - name: Git clone     # Первый шаг: клонирование репозитория
+        uses: actions/checkout@v4  # Действие GitHub для клонирования кода
+        with:
+          fetch-depth: 0    # Полное клонирование репозитория (включая историю всех коммитов)
+
       - name: Install JDK   # Установка Java Development Kit (JDK)
         uses: actions/setup-java@v4  # Действие GitHub для настройки JDK
         with:
