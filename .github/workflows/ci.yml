@@ -1,6 +1,9 @@
 name: Selenium CI with Maven
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main          # Запуск при создании pull request в ветку main
@@ -9,7 +12,7 @@ on:
 jobs:
   test:
     name: 'Test'
-    runs-on: ubuntu-latest №
+    runs-on: ubuntu-latest
 
     steps:
       - name: Git clone
