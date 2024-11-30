@@ -1,35 +1,41 @@
-name: Selenium CI with Maven
+name: Selenium CI with Maven  # Название workflow для отображения в интерфейсе GitHub Actions
 
 on:
-  push:
+  push:                     # Запуск workflow при push-коммитах в указанные ветки
     branches:
-      - main
-  pull_request:
+      - main                # Workflow будет запускаться только для ветки main
+  pull_request:             # Запуск workflow при создании pull request в указанные ветки
     branches:
-      - main          # Запуск при создании pull request в ветку main
-  workflow_dispatch:  # Ручной запуск через интерфейс GitHub
+      - main                # Workflow будет запускаться для pull request в ветку main
+  workflow_dispatch:        # Возможность ручного запуска workflow через интерфейс GitHub Actions
 
 jobs:
-  test:
-    name: 'Test'
-    runs-on: ubuntu-latest
+  test:                     # Определение работы (job) под названием 'test'
+    name: 'Test'            # Человеко-читаемое имя работы (отображается в интерфейсе GitHub Actions)
+    runs-on: ubuntu-latest  # Используемый runner — виртуальная машина с Ubuntu последней версии
 
-    steps:
-      - name: Git clone
-        uses: actions/checkout@v4
+    steps:                  # Последовательность шагов выполнения работы
+      - name: Git clone     # Первый шаг: клонирование репозитория
+        uses: actions/checkout@v4  # Действие GitHub для клонирования кода
         with:
-          fetch-depth: 0
+          fetch-depth: 0    # Полное клонирование репозитория (включая историю всех коммитов)
 
-      - name: Install JDK
-        uses: actions/setup-java@v4
+      - name: Install JDK   # Установка Java Development Kit (JDK)
+        uses: actions/setup-java@v4  # Действие GitHub для настройки JDK
         with:
-          distribution: 'corretto'
-          java-version: '17'
-          cache: 'maven'
+          distribution: 'corretto'  # Используется Amazon Corretto (бесплатная версия Java)
+          java-version: '17'        # Версия JDK — Java 17
+          cache: 'maven'            # Включение кэширования зависимостей Maven для ускорения сборки
 
-      - name: Maven test
-        run: mvn test
-        env:
+      - name: Maven test            # Шаг запуска тестов с помощью Maven
+        run: mvn test               # Выполнение команды для запуска тестов
+        env:                        # Переменные окружения для тестов
           CHROME_OPTIONS: --remote-allow-origins=*;--disable-gpu;--no-sandbox;--disable-dev-shm-usage;--headless=new;--window-size=1920,1080
-          CI_RUN: true
-
+          # CHROME_OPTIONS — передача настроек Chrome для запуска в CI
+          # --remote-allow-origins=*  — разрешение для удалённых источников
+          # --disable-gpu             — отключение использования GPU
+          # --no-sandbox              — отключение песочницы для повышения стабильности
+          # --disable-dev-shm-usage   — снижение использования общей памяти
+          # --headless=new            — запуск Chrome в безголовом режиме (без GUI)
+          # --window-size=1920,1080   — установка размеров окна браузера
+          CI_RUN: true               # Флаг для указания, что тесты запущены в CI
