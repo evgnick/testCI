@@ -1,0 +1,32 @@
+name: Selenium CI with Maven
+
+on:
+  pull_request:
+    branches:
+      - main          # Запуск при создании pull request в ветку main
+  workflow_dispatch:  # Ручной запуск через интерфейс GitHub
+
+jobs:
+  test:
+    name: 'Test'
+    runs-on: ubuntu-latest №
+
+    steps:
+      - name: Git clone
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'corretto'
+          java-version: '17'
+          cache: 'maven'
+
+      - name: Maven test
+        run: mvn test
+        env:
+          CHROME_OPTIONS: --remote-allow-origins=*;--disable-gpu;--no-sandbox;--disable-dev-shm-usage;--headless=new;--window-size=1920,1080
+          CI_RUN: true
+
